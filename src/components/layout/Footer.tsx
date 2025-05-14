@@ -1,6 +1,6 @@
 
 import { NAV_LINKS, SITE_NAME } from '@/lib/constants';
-import { Car } from 'lucide-react';
+import { ClipboardCheck } from 'lucide-react';
 import Link from 'next/link';
 
 export function Footer() {
@@ -12,7 +12,7 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2 text-xl font-bold">
-              <Car className="h-7 w-7 text-primary" />
+              <ClipboardCheck className="h-7 w-7 text-primary" />
               <span className="text-black dark:text-white">{SITE_NAME}</span>
             </Link>
             <p className="text-sm text-muted-foreground">

@@ -4,7 +4,7 @@
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { NAV_LINKS, SITE_NAME } from '@/lib/constants';
-import { Car, Menu, X } from 'lucide-react';
+import { ClipboardCheck, Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { NavLink } from './NavLink';
@@ -16,7 +16,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2 text-xl font-bold text-primary" aria-label={`${SITE_NAME} homepage`}>
-          <Car className="h-7 w-7 text-primary" />
+          <ClipboardCheck className="h-7 w-7 text-primary" />
           <span className="text-black dark:text-white">{SITE_NAME}</span>
         </Link>
 
@@ -38,7 +38,7 @@ export function Header() {
               <div className="flex flex-col gap-6">
                 <div className="flex items-center justify-between">
                    <Link href="/" className="flex items-center gap-2 text-lg font-bold text-primary" onClick={() => setIsMobileMenuOpen(false)}>
-                    <Car className="h-6 w-6" />
+                    <ClipboardCheck className="h-6 w-6" />
                     <span>{SITE_NAME}</span>
                   </Link>
                   <SheetClose asChild>
