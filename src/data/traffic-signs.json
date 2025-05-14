@@ -1,0 +1,372 @@
+{
+  "sign": [
+    {
+        "name": "No Stopping",
+        "selection1": "/traffic/images/1.png"
+    },
+    {
+        "name": "No Parking",
+        "selection1": "/traffic/images/2.png"
+    },
+    {
+        "name": "No Entry",
+        "selection1": "/traffic/images/3.png"
+    },
+    {
+        "name": "No Right Turn",
+        "selection1": "/traffic/images/4.png"
+    },
+    {
+        "name": "No Left Turn",
+        "selection1": "/traffic/images/5.png"
+    },
+    {
+        "name": "No U-Turn",
+        "selection1": "/traffic/images/6.png"
+    },
+    {
+        "name": "Maximum Speed",
+        "selection1": "/traffic/images/7.png"
+    },
+    {
+        "name": "Vehicle Width Limit",
+        "selection1": "/traffic/images/8.png"
+    },
+    {
+        "name": "No Overtaking",
+        "selection1": "/traffic/images/9.png"
+    },
+    {
+        "name": "No Horn",
+        "selection1": "/traffic/images/10.png"
+    },
+    {
+        "name": "Stop, Look, and Go",
+        "selection1": "/traffic/images/11.png"
+    },
+    {
+        "name": "End of Speed Limit",
+        "selection1": "/traffic/images/12.png"
+    },
+    {
+        "name": "Go Straight Only",
+        "selection1": "/traffic/images/13.png"
+    },
+    {
+        "name": "Go Ahead and Turn Left",
+        "selection1": "/traffic/images/14.png"
+    },
+    {
+        "name": "Go Any Direction",
+        "selection1": "/traffic/images/15.png"
+    },
+    {
+        "name": "Small Roundabout",
+        "selection1": "/traffic/images/16.png"
+    },
+    {
+        "name": "Vehicle Weight Limit",
+        "selection1": "/traffic/images/17.png"
+    },
+    {
+        "name": "Left Turn",
+        "selection1": "/traffic/images/18.png"
+    },
+    {
+        "name": "Sharp Left",
+        "selection1": "/traffic/images/19.png"
+    },
+    {
+        "name": "One Way Traffic",
+        "selection1": "/traffic/images/20.png"
+    },
+    {
+        "name": "Stop and Give Way",
+        "selection1": "/traffic/images/21.png"
+    },
+    {
+        "name": "Give Way to Main Road or Roundabout",
+        "selection1": "/traffic/images/22.png"
+    },
+    {
+        "name": "Truck Prohibited",
+        "selection1": "/traffic/images/23.png"
+    },
+    {
+        "name": "Vehicle Length Limit",
+        "selection1": "/traffic/images/24.png"
+    },
+    {
+        "name": "Vehicle Height Limit",
+        "selection1": "/traffic/images/25.png"
+    },
+    {
+        "name": "Axle Load Limit",
+        "selection1": "/traffic/images/26.png"
+    },
+    {
+        "name": "Pedestrians Prohibited",
+        "selection1": "/traffic/images/27.png"
+    },
+    {
+        "name": "Bullock Cart Prohibited",
+        "selection1": "/traffic/images/28.png"
+    },
+    {
+        "name": "End of Speed Limit",
+        "selection1": "/traffic/images/29.png"
+    },
+    {
+        "name": "Go (Temporary Sign)",
+        "selection1": "/traffic/images/30.png"
+    },
+    {
+        "name": "T Junction",
+        "selection1": "/traffic/images/31.png"
+    },
+    {
+        "name": "Danger",
+        "selection1": "/traffic/images/32.png"
+    },
+    {
+        "name": "Two-Way Road Ahead Straight",
+        "selection1": "/traffic/images/33.png"
+    },
+    {
+        "name": "Two-Way Road Ahead",
+        "selection1": "/traffic/images/34.png"
+    },
+    {
+        "name": "Right Turn",
+        "selection1": "/traffic/images/35.png"
+    },
+    {
+        "name": "Sharp Right Turn",
+        "selection1": "/traffic/images/36.png"
+    },
+    {
+        "name": "Narrow Bridge",
+        "selection1": "/traffic/images/37.png"
+    },
+    {
+        "name": "Steep Ascent",
+        "selection1": "/traffic/images/38.png"
+    },
+    {
+        "name": "Dangerous Sunken Road",
+        "selection1": "/traffic/images/39.png"
+    },
+    {
+        "name": "Road Narrowing on Both Sides",
+        "selection1": "/traffic/images/40.png"
+    },
+    {
+        "name": "Landslide Area",
+        "selection1": "/traffic/images/41.png"
+    },
+    {
+        "name": "Road Narrowing from Right",
+        "selection1": "/traffic/images/42.png"
+    },
+    {
+        "name": "Double Curve, First Left",
+        "selection1": "/traffic/images/43.png"
+    },
+    {
+        "name": "Y Junction",
+        "selection1": "/traffic/images/44.png"
+    },
+    {
+        "name": "Vehicles May Come from Left",
+        "selection1": "/traffic/images/45.png"
+    },
+    {
+        "name": "Vehicles May Come from Right",
+        "selection1": "/traffic/images/46.png"
+    },
+    {
+        "name": "Roundabout",
+        "selection1": "/traffic/images/47.png"
+    },
+    {
+        "name": "Height Limit Ahead",
+        "selection1": "/traffic/images/48.png"
+    },
+    {
+        "name": "Crossroad Ahead Main Road",
+        "selection1": "/traffic/images/49.png"
+    },
+    {
+        "name": "Crossroad Ahead Branch Road",
+        "selection1": "/traffic/images/50.png"
+    },
+    {
+        "name": "Steep Descent",
+        "selection1": "/traffic/images/51.png"
+    },
+    {
+        "name": "Domestic Animals",
+        "selection1": "/traffic/images/52.png"
+    },
+    {
+        "name": "Low Height Bumps",
+        "selection1": "/traffic/images/53.png"
+    },
+    {
+        "name": "Raised Road",
+        "selection1": "/traffic/images/54.png"
+    },
+    {
+        "name": "Pedestrian Crossing",
+        "selection1": "/traffic/images/55.png"
+    },
+    {
+        "name": "Right Branch Road",
+        "selection1": "/traffic/images/56.png"
+    },
+    {
+        "name": "Successive Intersections",
+        "selection1": "/traffic/images/57.png"
+    },
+    {
+        "name": "End of Dual Carriageway",
+        "selection1": "/traffic/images/58.png"
+    },
+    {
+        "name": "Traffic Sign",
+        "selection1": "/traffic/images/59.png"
+    },
+    {
+        "name": "Wild Animals",
+        "selection1": "/traffic/images/60.png"
+    },
+    {
+        "name": "Pedestrians Ahead",
+        "selection1": "/traffic/images/61.png"
+    },
+    {
+        "name": "Riverbank",
+        "selection1": "/traffic/images/62.png"
+    },
+    {
+        "name": "Railway Crossing Without Gate",
+        "selection1": "/traffic/images/63.png"
+    },
+    {
+        "name": "Loose Gravel",
+        "selection1": "/traffic/images/64.png"
+    },
+    {
+        "name": "Road Work Ahead",
+        "selection1": "/traffic/images/65.png"
+    },
+    {
+        "name": "Check Post",
+        "selection1": "/traffic/images/66.png"
+    },
+    {
+        "name": "Children",
+        "selection1": "/traffic/images/67.png"
+    },
+    {
+        "name": "Sharp Left Turn",
+        "selection1": "/traffic/images/68.png"
+    },
+    {
+        "name": "Sharp Turn (Temporary Road)",
+        "selection1": "/traffic/images/69.png"
+    },
+    {
+        "name": "T Junction (Left and Right Turn)",
+        "selection1": "/traffic/images/70.png"
+    },
+    {
+        "name": "Parking Area",
+        "selection1": "/traffic/images/71.png"
+    },
+    {
+        "name": "One Way Road",
+        "selection1": "/traffic/images/72.png"
+    },
+    {
+        "name": "Workshop",
+        "selection1": "/traffic/images/73.png"
+    },
+    {
+        "name": "First Aid Camp",
+        "selection1": "/traffic/images/74.png"
+    },
+    {
+        "name": "Overtaking Zone",
+        "selection1": "/traffic/images/75.png"
+    },
+    {
+        "name": "Telephone",
+        "selection1": "/traffic/images/76.png"
+    },
+    {
+        "name": "End of Road",
+        "selection1": "/traffic/images/77.png"
+    },
+    {
+        "name": "Pedestrian Path",
+        "selection1": "/traffic/images/78.png"
+    },
+    {
+        "name": "Petrol Pump",
+        "selection1": "/traffic/images/79.png"
+    },
+    {
+        "name": "Bus Stop",
+        "selection1": "/traffic/images/80.png"
+    },
+    {
+        "name": "Hospital",
+        "selection1": "/traffic/images/81.png"
+    },
+    {
+        "name": "Refreshment Area",
+        "selection1": "/traffic/images/82.png"
+    },
+    {
+        "name": "Pedestrian and Bicycle Path",
+        "selection1": "/traffic/images/83.png"
+    },
+    {
+        "name": "Restaurant",
+        "selection1": "/traffic/images/84.png"
+    },
+    {
+        "name": "Pedestrian Path",
+        "selection1": "/traffic/images/85.png"
+    },
+    {
+        "name": "Bicycle Path",
+        "selection1": "/traffic/images/86.png"
+    },
+    {
+        "name": "Bus Stop",
+        "selection1": "/traffic/images/87.png"
+    },
+    {
+        "name": "Picnic Area",
+        "selection1": "/traffic/images/88.png"
+    },
+    {
+        "name": "Zebra Crossing",
+        "selection1": "/traffic/images/89.png"
+    },
+    {
+        "name": "Parking Only If Necessary",
+        "selection1": "/traffic/images/90.png"
+    },
+    {
+        "name": "Roadside Lines",
+        "selection1": "/traffic/images/91.png"
+    },
+    {
+        "name": "Center Road Lines",
+        "selection1": "/traffic/images/92.png"
+    }
+  ]
+}

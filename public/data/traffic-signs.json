@@ -1,0 +1,45 @@
+
+[
+  {
+    "id": "ts001",
+    "name": "रोक्नुहोस्",
+    "image_url": "https://picsum.photos/seed/stop_sign/200/200",
+    "description": "चालकहरूले आफ्नो सवारी साधनलाई पूर्ण रूपमा रोक्नुपर्छ र अगाडि बढ्नु अघि बाटो खाली छ भनी सुनिश्चित गर्नुपर्छ।",
+    "category": "अनिवार्य"
+  },
+  {
+    "id": "ts002",
+    "name": "प्रवेश निषेध",
+    "image_url": "https://picsum.photos/seed/no_entry_sign/200/200",
+    "description": "यो सडक वा क्षेत्रमा सवारी साधनहरूलाई प्रवेश गर्न अनुमति छैन।",
+    "category": "निषेधात्मक संकेतहरू"
+  },
+  {
+    "id": "ts003",
+    "name": "पैदल यात्री क्रसिङ",
+    "image_url": "https://picsum.photos/seed/ped_crossing_sign/200/200",
+    "description": "पैदलयात्रीहरूले सडक पार गर्न सक्ने निर्दिष्ट स्थानलाई संकेत गर्दछ। चालकहरू रोक्न तयार हुनुपर्छ।",
+    "category": "चेतावनी"
+  },
+  {
+    "id": "ts004",
+    "name": "गति सीमा ५० कि.मि./घण्टा",
+    "image_url": "https://picsum.photos/seed/speed_limit_50/200/200",
+    "description": "यो सडकमा अधिकतम अनुमति प्राप्त गति ५० किलोमिटर प्रति घण्टा हो।",
+    "category": "अनिवार्य"
+  },
+  {
+    "id": "ts005",
+    "name": "अगाडि अस्पताल",
+    "image_url": "https://picsum.photos/seed/hospital_sign/200/200",
+    "description": "नजिकै अस्पताल छ भनी संकेत गर्दछ। चालकहरूले अनावश्यक आवाज गर्नबाट जोगिनु पर्छ।",
+    "category": "जानकारीमूलक"
+  },
+  {
+    "id": "ts006",
+    "name": "बाटो दिनुहोस्",
+    "image_url": "https://picsum.photos/seed/give_way_sign/200/200",
+    "description": "गति कम गर्नुहोस् र प्रमुख सडक वा चोकमा रहेका सवारी साधनहरूलाई बाटो दिनुहोस्।",
+    "category": " प्राथमिकता संकेतहरू"
+  }
+]
