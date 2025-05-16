@@ -1,9 +1,9 @@
 
 'use client';
 
-import Script from 'next/script';
 import type { BlogPost } from '@/lib/blog';
-import { SITE_NAME, SITE_URL, SITE_LOGO_URL } from '@/lib/constants';
+import { SITE_LOGO_URL, SITE_NAME, SITE_URL } from '@/lib/constants';
+import Script from 'next/script';
 
 interface SeoSchemaProps {
   blogPost: BlogPost;
@@ -18,7 +18,7 @@ const SeoSchema: React.FC<SeoSchemaProps> = ({ blogPost }) => {
       '@id': `${SITE_URL}/blog/${blogPost.slug}`,
     },
     headline: blogPost.title,
-    image: [blogPost.image], // Assuming post.image is a full URL or resolvable path
+    image: [blogPost.image || blogPost.coverImage || SITE_LOGO_URL], // Use image, coverImage, or default
     datePublished: new Date(blogPost.date).toISOString(),
     dateModified: new Date(blogPost.date).toISOString(), // Use a separate modified date if available
     author: {

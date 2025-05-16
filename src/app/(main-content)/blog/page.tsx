@@ -62,7 +62,7 @@ export default function BlogPage() {
             <Link href={`/blog/${post.slug}`} className="block" aria-label={`Read more about ${post.title}`}>
               <div className="relative h-56 w-full">
                 <Image 
-                  src={post.image} 
+                  src={post.image || post.coverImage || '/images/og-default.png'} 
                   alt={post.title} 
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

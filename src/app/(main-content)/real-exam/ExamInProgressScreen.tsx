@@ -1,7 +1,6 @@
 
 'use client';
 
-import { useState } from 'react';
 import { PatternQuestion } from '@/components/shared/PatternQuestion';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from '@/components/ui/button';
@@ -13,6 +12,7 @@ import type { Question } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight, Timer } from 'lucide-react';
 import Image from 'next/image';
+import { useState } from 'react';
 
 interface ExamInProgressScreenProps {
   currentQuestion: Question;

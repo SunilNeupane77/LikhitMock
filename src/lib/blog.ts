@@ -1,6 +1,6 @@
 import fs from 'fs';
-import path from 'path';
 import matter from 'gray-matter';
+import path from 'path';
 
 const postsDirectory = path.join(process.cwd(), 'content/blog');
 
@@ -8,11 +8,13 @@ export interface BlogPostFrontmatter {
   title: string;
   date: string;
   excerpt: string;
-  image: string;
+  image?: string;
+  coverImage?: string;  // Added coverImage field to match the blog post frontmatter
   dataAiHint?: string;
-  category: string;
-  tags: string[];
-  authors?: {name: string}[];
+  category?: string;
+  categories?: string[];  // Some posts might use categories array instead of single category
+  tags?: string[];
+  authors?: {name: string}[] | string;  // Some posts might use a single author string
 }
 
 export interface BlogPost extends BlogPostFrontmatter {

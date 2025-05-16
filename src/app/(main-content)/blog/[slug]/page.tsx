@@ -2,13 +2,19 @@ import MarkdownContent from '@/components/shared/MarkdownContent';
 import SeoSchema from '@/components/shared/SeoSchema';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { getAllPostSlugs, getPostData } from '@/lib/blog';
+import { BlogPost, getAllPostSlugs, getPostData } from '@/lib/blog';
 import { SITE_NAME, SITE_URL } from '@/lib/constants';
 import { ArrowLeft, CalendarDays, Tag } from 'lucide-react';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+
+// Helper function to get the correct image URL, handling both image and coverImage fields
+function getImageUrl(post: BlogPost): string {
+  const imageField = post.image || post.coverImage || '/images/og-default.png';
+  return imageField.startsWith('http') ? imageField : `${SITE_URL}${imageField}`;
+}
 
 interface BlogPostPageProps {
   params: { slug: string };
@@ -42,7 +48,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       authors: [SITE_NAME], // Or specific author if available
       images: [
         { 
-          url: post.image.startsWith('http') ? post.image : `${SITE_URL}${post.image}`, // Ensure absolute URL
+          url: getImageUrl(post),
           alt: post.title,
           width: 800, // Provide image dimensions if known
           height: 400,
@@ -54,7 +60,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       card: 'summary_large_image',
       title: post.title,
       description: post.excerpt,
-      images: [post.image.startsWith('http') ? post.image : `${SITE_URL}${post.image}`], // Ensure absolute URL
+      images: [getImageUrl(post)], // Ensure absolute URL
        // creator: '@YourTwitterHandle', // Add your Twitter handle
     },
   };
@@ -111,10 +117,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     <span>By {post.authors?.map(author => author.name).join(', ')}</span>
                   </div>
                 </div>
-                {post.image && (
+                {(post.image || post.coverImage) && (
                   <div className="relative h-64 md:h-80 lg:h-96 w-full rounded-lg overflow-hidden shadow-lg mb-8">
                     <Image 
-                      src={post.image} 
+                      src={getImageUrl(post)} 
                       alt={post.title} 
                       fill 
                       className="object-cover" 
