@@ -1,16 +1,17 @@
 
-import { RealExamClient } from '../RealExamClient';
-import type { Metadata } from 'next';
-import { SITE_NAME, SITE_URL } from '@/lib/constants';
-import { ClipboardCheck, AlertTriangle } from 'lucide-react'; // Added AlertTriangle
-import type { ExamCategoryType, Question as AppQuestionType } from '@/lib/types';
-import { notFound } from 'next/navigation';
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'; // Added Alert components
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'; // Added Alert components
 import { Button } from '@/components/ui/button'; // Added Button
+import { SITE_NAME, SITE_URL } from '@/lib/constants';
+import type { Question as AppQuestionType, ExamCategoryType } from '@/lib/types';
+import { AlertTriangle, ClipboardCheck } from 'lucide-react'; // Added AlertTriangle
+import type { Metadata } from 'next';
 import Link from 'next/link'; // Added Link
+import { notFound } from 'next/navigation';
+import { RealExamClient } from '../RealExamClient';
 
 import akQuestionsData from '@/data/ak.json';
 import trafficQuestionsData from '@/data/trafficqn.json';
+import { loadPatternQuestions, mixPatternQuestionsWithRegular } from '@/lib/pattern-questions';
 
 const VALID_CATEGORIES: ExamCategoryType[] = ['A', 'B', 'Mixed', 'Traffic']; 
 
@@ -105,7 +106,8 @@ export default async function RealExamCategoryPage({ params }: RealExamPageProps
     }
   });
   
-  const allQuestions: AppQuestionType[] = Array.from(uniqueQuestionsMap.values())
+  // Convert standard questions
+  const standardQuestions: AppQuestionType[] = Array.from(uniqueQuestionsMap.values())
     .filter(q => q && q.n && q.category && Array.isArray(q.a4) && q.a4.length > 0 && typeof q.an === 'string')
     .map((q: any) => ({
       id: q.n, 
@@ -116,6 +118,21 @@ export default async function RealExamCategoryPage({ params }: RealExamPageProps
       a4: q.a4 as string[], 
       an: q.an as string,   
     }));
+    
+  // Get pattern questions
+  const patternQuestions = await loadPatternQuestions();
+  
+  // Filter pattern questions based on category
+  const categoryPatternQuestions = patternQuestions.filter(q => {
+    if (category === 'Mixed') return true;
+    if (category === 'A' && (q.category === 'A' || q.category === 'K')) return true; 
+    if (category === 'B' && q.category === 'B') return true;
+    if (category === 'Traffic' && q.category === 'Traffic') return true;
+    return false;
+  });
+  
+  // Mix pattern questions with standard questions - making 20% of exam questions pattern-based
+  const allQuestions = await mixPatternQuestionsWithRegular(standardQuestions, categoryPatternQuestions, 0.2);
 
   const isCategoryBComingSoon = category === 'B' && allQuestions.filter(q => q.category === 'B').length === 0;
   const categoryDisplayName = getCategoryDisplayName(category);

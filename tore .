@@ -1,0 +1,77 @@
+[1mdiff --git a/docs/blueprint.md b/docs/blueprint.md[m
+[1mindex b744884..1089ab8 100644[m
+[1m--- a/docs/blueprint.md[m
+[1m+++ b/docs/blueprint.md[m
+[36m@@ -1,4 +1,4 @@[m
+[31m-# **App Name**: LicensePrep Nepal[m
+[32m+[m[32m# **App Name**:  LickhitMock[m
+ [m
+ ## Core Features:[m
+ [m
+[36m@@ -8,7 +8,7 @@[m
+ [m
+ ## Style Guidelines:[m
+ [m
+[31m-- Use a calming blue (#3498db) to inspire trust and focus.[m
+[32m+[m[32m- Use a calming red and black  (#3498db) to inspire trust and focus.[m
+ - Incorporate a clean white (#ffffff) for backgrounds to ensure readability.[m
+ - Use a vibrant green (#2ecc71) for correct answers and progress indicators.[m
+ - Prioritize clear and readable typography for questions and explanations.[m
+[1mdiff --git a/src/components/shared/MarkdownContent.tsx b/src/components/shared/MarkdownContent.tsx[m
+[1mindex 3fd197e..506e0fe 100644[m
+[1m--- a/src/components/shared/MarkdownContent.tsx[m
+[1m+++ b/src/components/shared/MarkdownContent.tsx[m
+[36m@@ -2,15 +2,27 @@[m
+ 'use client';[m
+ [m
+ import Link from 'next/link';[m
+[32m+[m[32mimport type { FC } from 'react';[m
+[32m+[m[32mimport { useMemo } from 'react';[m
+ import ReactMarkdown, { type Components } from 'react-markdown';[m
+ import remarkGfm from 'remark-gfm'; // For GitHub Flavored Markdown (tables, strikethrough, etc.)[m
+[31m-import type { FC } from 'react';[m
+ [m
+ interface MarkdownContentProps {[m
+   content: string;[m
+ }[m
+ [m
+ const MarkdownContent: FC<MarkdownContentProps> = ({ content }) => {[m
+[32m+[m[32m  // Process content to handle correct/incorrect answer formatting[m
+[32m+[m[32m  const processedContent = useMemo(() => {[m
+[32m+[m[32m    // Replace {correct: Some answer} with a specially marked span[m
+[32m+[m[32m    let processed = content.replace(/\{correct:\s*(.*?)\}/g, '<span class="answer-correct">$1</span>');[m
+[32m+[m[41m    [m
+[32m+[m[32m    // Replace {incorrect: Some answer} with a specially marked span[m
+[32m+[m[32m    processed = processed.replace(/\{incorrect:\s*(.*?)\}/g, '<span class="answer-incorrect">$1</span>');[m
+[32m+[m[41m    [m
+[32m+[m[32m    return processed;[m
+[32m+[m[32m  }, [content]);[m
+[32m+[m
+   const components: Components = {[m
+     a: ({ node, href, children, ...props }) => {[m
+       // The `props` will include `className` if provided by remark-gfm or other plugins.[m
+[36m@@ -22,13 +34,22 @@[m [mconst MarkdownContent: FC<MarkdownContentProps> = ({ content }) => {[m
+       // External link[m
+       return <a href={href} target="_blank" rel="noopener noreferrer" {...props}>{children}</a>;[m
+     },[m
+[32m+[m[32m    // Custom renderer for span elements to handle our answer formatting[m
+[32m+[m[32m    span: ({ node, className, children, ...props }) => {[m
+[32m+[m[32m      if (className === 'answer-correct') {[m
+[32m+[m[32m        return <span className="text-green-600 font-medium" {...props}>{children}</span>;[m
+[32m+[m[32m      } else if (className === 'answer-incorrect') {[m
+[32m+[m[32m        return <span className="text-red-600 font-medium" {...props}>{children}</span>;[m
+[32m+[m[32m      }[m
+[32m+[m[32m      return <span className={className} {...props}>{children}</span>;[m
+[32m+[m[32m    },[m
+     // Add other customizations if needed, e.g., for images, headings.[m
+     // For now, let Tailwind Typography handle the styling of other elements like h1, h2, h3, p, ul, ol, etc.[m
+   };[m
+ [m
+   return ([m
+[31m-    <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>[m
+[31m-      {content}[m
+[32m+[m[32m    <ReactMarkdown remarkPlugins={[remarkGfm]} components={components} allowDangerousHtml>[m
+[32m+[m[32m      {processedContent}[m
+     </ReactMarkdown>[m
+   );[m
+ };[m

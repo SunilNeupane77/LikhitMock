@@ -13,6 +13,7 @@ export const NAV_LINKS: NavItem[] = [
   { href: "/", label: "Home", icon: Home },
   { href: "/real-exam", label: "Real Exam", icon: ClipboardCheck },
   { href: "/practice", label: "Practice Test", icon: FileText }, 
+  { href: "/pattern-examples", label: "Question Patterns", icon: ListChecks },
   { href: "/traffic-signs", label: "Traffic Signs", icon: TrafficCone },
   { href: "/blog", label: "Blog", icon: Rss },
   { href: "/tutorials", label: "Tutorials", icon: Film },

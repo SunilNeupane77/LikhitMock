@@ -1,16 +1,17 @@
 
-import { PracticeTestClient } from '../../PracticeTestClient'; 
-import type { Metadata } from 'next';
-import { SITE_NAME, SITE_URL } from '@/lib/constants';
-import { FileText, AlertTriangle } from 'lucide-react'; // Added AlertTriangle
-import type { Question as AppQuestionType } from '@/lib/types';
-import { notFound, redirect } from 'next/navigation';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { SITE_NAME, SITE_URL } from '@/lib/constants';
+import type { Question as AppQuestionType } from '@/lib/types';
+import { AlertTriangle, FileText } from 'lucide-react'; // Added AlertTriangle
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound, redirect } from 'next/navigation';
+import { PracticeTestClient } from '../../PracticeTestClient';
 
 import akQuestionsData from '@/data/ak.json';
 import trafficQuestionsData from '@/data/trafficqn.json';
+import { loadPatternQuestions, mixPatternQuestionsWithRegular } from '@/lib/pattern-questions';
 
 const QUESTIONS_PER_PAGE = 20;
 const VALID_CATEGORIES = ['A', 'B'];
@@ -62,6 +63,7 @@ export async function generateMetadata({ params }: PracticeTestPageProps): Promi
 
 export async function generateStaticParams() {
   const params: { category: string; page: string }[] = [];
+  const patternQuestions = await loadPatternQuestions();
 
   for (const category of VALID_CATEGORIES) {
     let categoryQuestions: AppQuestionType[] = [];
@@ -76,10 +78,16 @@ export async function generateStaticParams() {
     const allTrafficQuestions = (trafficQuestionsData.questions || [])
       .map(q => ({ ...q, id: q.n, category: 'Traffic' as 'Traffic' }));
 
+    // Include pattern questions for this category
+    const categoryPatternQuestions = patternQuestions.filter(q => 
+      q.category === category || 
+      (category === 'A' && q.category === 'K')
+    );
+
     if (category === 'A') {
-      categoryQuestions = [...textualQuestions, ...allTrafficQuestions];
+      categoryQuestions = [...textualQuestions, ...allTrafficQuestions, ...categoryPatternQuestions];
     } else if (category === 'B') {
-      categoryQuestions = [...textualQuestions, ...allTrafficQuestions];
+      categoryQuestions = [...textualQuestions, ...allTrafficQuestions, ...categoryPatternQuestions];
     }
     
     const totalPages = Math.ceil(categoryQuestions.length / QUESTIONS_PER_PAGE);
@@ -123,7 +131,20 @@ export default async function PaginatedPracticeTestPage({ params }: PracticeTest
   const allTrafficQuestions: AppQuestionType[] = (trafficQuestionsData.questions || [])
     .map(q => ({ ...q, id: q.n, category: 'Traffic' as 'Traffic' }));
 
-  const allQuestionsForCategory: AppQuestionType[] = [...categoryTextualQuestions, ...allTrafficQuestions];
+  // Load pattern questions for this category
+  const patternQuestions = await loadPatternQuestions();
+  const categoryPatternQuestions = patternQuestions.filter(q => 
+    q.category === category || 
+    (category === 'A' && q.category === 'K') // Include K category pattern questions for category A
+  );
+  
+  // Mix pattern questions with regular questions (30% pattern questions)
+  const regularQuestionsForCategory = [...categoryTextualQuestions, ...allTrafficQuestions];
+  const allQuestionsForCategory: AppQuestionType[] = await mixPatternQuestionsWithRegular(
+    regularQuestionsForCategory, 
+    categoryPatternQuestions,
+    0.3 // 30% of questions will be pattern questions
+  );
   const isCategoryBComingSoon = category === 'B' && categoryTextualQuestions.length === 0;
 
 
@@ -178,7 +199,7 @@ export default async function PaginatedPracticeTestPage({ params }: PracticeTest
                 Practice Test: {getCategoryDisplayName(category)}
             </h1>
             <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-                Page {page} of {totalPages}. Sharpen your skills with these targeted practice questions.
+                Page {page} of {totalPages}. Sharpen your skills with these targeted practice questions, including new question patterns.
             </p>
         </header>
         <PracticeTestClient 

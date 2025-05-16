@@ -1,10 +1,10 @@
 
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { PRACTICE_CATEGORIES_CONFIG, SITE_NAME, SITE_URL } from '@/lib/constants';
+import { ArrowRight, FileText, ListChecks } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { SITE_NAME, SITE_URL, PRACTICE_CATEGORIES_CONFIG } from '@/lib/constants';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ArrowRight, FileText } from 'lucide-react';
 
 const pageUrl = `${SITE_URL}/practice`;
 
@@ -40,6 +40,14 @@ export default function SelectPracticeCategoryPage() {
         <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
           Select the vehicle category for your practice test. Each category includes all relevant textual questions and all traffic sign questions, presented in paginated sets.
         </p>
+        <div className="mt-6">
+          <Button variant="outline" asChild>
+            <Link href="/pattern-examples" className="rounded-full">
+              <ListChecks className="mr-2 h-4 w-4" /> 
+              New! Explore Different Question Patterns
+            </Link>
+          </Button>
+        </div>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-xl mx-auto">

@@ -2,6 +2,7 @@
 'use client';
 
 import { NumberPagination } from '@/components/shared/NumberPagination';
+import { PatternQuestion } from '@/components/shared/PatternQuestion';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   AlertDialog,
@@ -91,6 +92,76 @@ export function PracticeTestClient({
       }
     }));
   };
+  
+  const handlePatternAnswer = (questionId: string, answer: any) => {
+    const question = questionsForCurrentPage.find(q => q.id === questionId);
+    if (!question || (pageAnswers[questionId] && pageAnswers[questionId].revealed)) return;
+    
+    setPageAnswers(prevAnswers => ({
+      ...prevAnswers,
+      [questionId]: {
+        selectedOption: answer,
+        revealed: false,
+        correct: null,
+      }
+    }));
+  };
+  
+  const handleRevealAnswer = (questionId: string) => {
+    const question = questionsForCurrentPage.find(q => q.id === questionId);
+    if (!question) return;
+    
+    const answerState = pageAnswers[questionId];
+    if (!answerState || answerState.revealed) return;
+    
+    let isCorrect = false;
+    
+    switch(question.pattern) {
+      case 'multiple-choice':
+        if (Array.isArray(answerState.selectedOption) && Array.isArray(question.multipleCorrectAnswers)) {
+          // Check if selected options match the correct answers
+          const selectedOptions = answerState.selectedOption.map(i => question.a4[i]);
+          isCorrect = 
+            selectedOptions.length === question.multipleCorrectAnswers.length && 
+            selectedOptions.every(opt => question.multipleCorrectAnswers?.includes(opt));
+        }
+        break;
+      case 'true-false':
+        isCorrect = question.a4[answerState.selectedOption as number] === question.an;
+        break;
+      case 'matching':
+        if (typeof answerState.selectedOption === 'object' && answerState.selectedOption !== null && question.matchItems) {
+          const matching = answerState.selectedOption as Record<string, string>;
+          isCorrect = question.matchItems.every(item => matching[item.left] === item.right);
+        }
+        break;
+      case 'sequence':
+        if (Array.isArray(answerState.selectedOption) && Array.isArray(question.correctSequence)) {
+          isCorrect = 
+            answerState.selectedOption.length === question.correctSequence.length &&
+            answerState.selectedOption.every((item, i) => item === question.correctSequence?.[i]);
+        }
+        break;
+      case 'fill-blank':
+        if (typeof answerState.selectedOption === 'number') {
+          isCorrect = question.a4[answerState.selectedOption] === question.an;
+        }
+        break;
+      case 'single-choice':
+      default:
+        isCorrect = question.a4[answerState.selectedOption as number] === question.an;
+        break;
+    }
+    
+    setPageAnswers(prevAnswers => ({
+      ...prevAnswers,
+      [questionId]: {
+        ...prevAnswers[questionId],
+        revealed: true,
+        correct: isCorrect,
+      }
+    }));
+  };
 
   const attemptedQuestionsCount = useMemo(() => {
     return Object.values(pageAnswers).filter(answer => answer.revealed).length;
@@ -127,6 +198,30 @@ export function PracticeTestClient({
             <CardContent className="space-y-10">
               {questionsForCurrentPage.map((question, index) => {
                 const answerState = pageAnswers[question.id];
+                
+                // Use PatternQuestion component for questions with pattern specified
+                if (question.pattern) {
+                  return (
+                    <PatternQuestion 
+                      key={question.id}
+                      question={question}
+                      questionNumber={index + 1}
+                      selectedOption={answerState?.selectedOption}
+                      selectedMatching={typeof answerState?.selectedOption === 'object' && answerState?.selectedOption !== null 
+                        ? answerState?.selectedOption as Record<string, string> 
+                        : {}}
+                      selectedSequence={Array.isArray(answerState?.selectedOption) ? answerState?.selectedOption : []}
+                      revealed={answerState?.revealed || false}
+                      isCorrect={answerState?.correct}
+                      onAnswer={(answer) => handlePatternAnswer(question.id, answer)}
+                      onReveal={() => handleRevealAnswer(question.id)}
+                      showRevealButton={true}
+                      disabled={false}
+                    />
+                  );
+                }
+                
+                // Default question rendering for backward compatibility
                 return (
                   <div key={question.id} className="p-4 border rounded-lg shadow-sm bg-background hover:shadow-md transition-shadow">
                     <p className="text-base sm:text-lg font-semibold mb-3">
