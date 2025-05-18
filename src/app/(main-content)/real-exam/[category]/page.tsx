@@ -1,17 +1,14 @@
 
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'; // Added Alert components
-import { Button } from '@/components/ui/button'; // Added Button
 import { SITE_NAME, SITE_URL } from '@/lib/constants';
 import type { Question as AppQuestionType, ExamCategoryType } from '@/lib/types';
-import { AlertTriangle, ClipboardCheck } from 'lucide-react'; // Added AlertTriangle
+import { ClipboardCheck } from 'lucide-react'; // Added AlertTriangle
 import type { Metadata } from 'next';
-import Link from 'next/link'; // Added Link
 import { notFound } from 'next/navigation';
 import { RealExamClient } from '../RealExamClient';
 
 import akQuestionsData from '@/data/ak.json';
+import bQuestionsData from '@/data/b-fixed-single-line-corrected.json';
 import trafficQuestionsData from '@/data/trafficqn.json';
-import { loadPatternQuestions, mixPatternQuestionsWithRegular } from '@/lib/pattern-questions';
 
 const VALID_CATEGORIES: ExamCategoryType[] = ['A', 'B', 'Mixed', 'Traffic']; 
 
@@ -30,13 +27,15 @@ function getCategoryDisplayName(category: ExamCategoryType): string {
 }
 
 export async function generateStaticParams() {
+  // Pre-define all valid categories to ensure proper static generation
   return VALID_CATEGORIES.map((category) => ({
     category,
   }));
 }
 
 export async function generateMetadata({ params }: RealExamPageProps): Promise<Metadata> {
-  const { category } = params;
+  // Use the category as a variable directly after awaiting params
+  const category = (await params).category as ExamCategoryType;
 
   if (!VALID_CATEGORIES.includes(category)) {
     return {
@@ -80,7 +79,7 @@ export async function generateMetadata({ params }: RealExamPageProps): Promise<M
 }
 
 export default async function RealExamCategoryPage({ params }: RealExamPageProps) {
-  const { category } = params;
+  const category = (await params).category as ExamCategoryType;
 
   if (!VALID_CATEGORIES.includes(category)) {
     notFound();
@@ -89,25 +88,46 @@ export default async function RealExamCategoryPage({ params }: RealExamPageProps
   let rawQuestions: any[] = [];
 
   if (category === 'A' || category === 'B') {
-    const textualCategoryQuestions = (akQuestionsData.questions || []).filter(q => q.category === category);
-    rawQuestions.push(...textualCategoryQuestions);
+    // Add questions from akQuestionsData that match the category
+    const categoryQuestions = (akQuestionsData.questions || []).filter(q => q.category === category);
+    rawQuestions.push(...categoryQuestions);
+    
+    // If category is B, also add questions from bQuestionsData
+    if (category === 'B') {
+      const bQuestions = (bQuestionsData.questions || []).filter(q => q.category === 'B');
+      rawQuestions.push(...bQuestions);
+    }
+    
+    // Add traffic questions
     rawQuestions.push(...(trafficQuestionsData.questions || []));
   } else if (category === 'Traffic') {
     rawQuestions.push(...(trafficQuestionsData.questions || []));
   } else if (category === 'Mixed') {
-    rawQuestions.push(...(akQuestionsData.questions || [])); 
+    // For mixed category, include both A and B
+    const aQuestions = (akQuestionsData.questions || []).filter(q => q.category === 'A');
+    rawQuestions.push(...aQuestions);
+    
+    // Get B questions from both sources
+    const bRawQuestions = (akQuestionsData.questions || []).filter(q => q.category === 'B');
+    rawQuestions.push(...bRawQuestions);
+    
+    const bFixedQuestions = (bQuestionsData.questions || []).filter(q => q.category === 'B');
+    rawQuestions.push(...bFixedQuestions);
+    
+    // Add traffic questions
     rawQuestions.push(...(trafficQuestionsData.questions || []));
   }
   
+  // Create a Map to store unique questions by their ID
   const uniqueQuestionsMap = new Map<string, any>();
   rawQuestions.forEach(q => {
-    if (q && q.n && !uniqueQuestionsMap.has(q.n)) {
+    if (q && typeof q === 'object' && 'n' in q && !uniqueQuestionsMap.has(q.n)) {
       uniqueQuestionsMap.set(q.n, q);
     }
   });
   
   // Convert standard questions
-  const standardQuestions: AppQuestionType[] = Array.from(uniqueQuestionsMap.values())
+  const allQuestions: AppQuestionType[] = Array.from(uniqueQuestionsMap.values())
     .filter(q => q && q.n && q.category && Array.isArray(q.a4) && q.a4.length > 0 && typeof q.an === 'string')
     .map((q: any) => ({
       id: q.n, 
@@ -118,47 +138,10 @@ export default async function RealExamCategoryPage({ params }: RealExamPageProps
       a4: q.a4 as string[], 
       an: q.an as string,   
     }));
-    
-  // Get pattern questions
-  const patternQuestions = await loadPatternQuestions();
-  
-  // Filter pattern questions based on category
-  const categoryPatternQuestions = patternQuestions.filter(q => {
-    if (category === 'Mixed') return true;
-    if (category === 'A' && (q.category === 'A' || q.category === 'K')) return true; 
-    if (category === 'B' && q.category === 'B') return true;
-    if (category === 'Traffic' && q.category === 'Traffic') return true;
-    return false;
-  });
-  
-  // Mix pattern questions with standard questions - making 20% of exam questions pattern-based
-  const allQuestions = await mixPatternQuestionsWithRegular(standardQuestions, categoryPatternQuestions, 0.2);
 
-  const isCategoryBComingSoon = category === 'B' && allQuestions.filter(q => q.category === 'B').length === 0;
+  // Set isCategoryBComingSoon to false since we now have B questions
+  const isCategoryBComingSoon = false;
   const categoryDisplayName = getCategoryDisplayName(category);
-
-  if (isCategoryBComingSoon && category === 'B') {
-    return (
-      <div className="container py-8 md:py-12 text-center">
-        <header className="mb-10 text-center">
-          <AlertTriangle className="mx-auto h-12 w-12 text-primary mb-4" />
-          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-            Real Exam: {categoryDisplayName}
-          </h1>
-        </header>
-        <Alert variant="default" className="max-w-md mx-auto">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertTitle>Coming Soon!</AlertTitle>
-          <AlertDescription>
-            Real exam questions for Category B (Car/Jeep/Van) are currently being prepared and will be available soon. Please check back later or try another category.
-          </AlertDescription>
-        </Alert>
-        <Button asChild className="mt-8">
-          <Link href="/real-exam">Choose Another Category</Link>
-        </Button>
-      </div>
-    );
-  }
 
 
   return (

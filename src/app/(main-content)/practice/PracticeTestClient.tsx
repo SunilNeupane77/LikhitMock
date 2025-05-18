@@ -1,8 +1,6 @@
-
 'use client';
 
 import { NumberPagination } from '@/components/shared/NumberPagination';
-import { PatternQuestion } from '@/components/shared/PatternQuestion';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   AlertDialog,
@@ -52,7 +50,9 @@ export function PracticeTestClient({
   useEffect(() => {
     const initialAnswers: Record<string, QuestionAnswerState> = {};
     questionsForCurrentPage.forEach(q => {
-      initialAnswers[q.id] = { selectedOption: null, revealed: false, correct: null };
+      if (q && q.id) {
+        initialAnswers[q.id] = { selectedOption: null, revealed: false, correct: null };
+      }
     });
     setPageAnswers(initialAnswers);
   }, [questionsForCurrentPage, currentPage]);
@@ -61,13 +61,15 @@ export function PracticeTestClient({
     let currentScore = 0;
     let currentIncorrectAnswers: Question[] = [];
     questionsForCurrentPage.forEach(q => {
+      if (!q || !q.id || !q.a4 || !q.an) return; // Skip invalid questions
+      
       const answerState = pageAnswers[q.id];
       if (answerState && answerState.revealed && answerState.correct) {
         currentScore++;
       } else if (answerState && answerState.revealed && !answerState.correct) {
         // Find the original question object to add to incorrectAnswersOnPage
         const originalQuestion = questionsForCurrentPage.find(ques => ques.id === q.id);
-        if (originalQuestion) {
+        if (originalQuestion && originalQuestion.a4 && originalQuestion.an) {
             currentIncorrectAnswers.push(originalQuestion);
         }
       }
@@ -78,8 +80,8 @@ export function PracticeTestClient({
 
   const handleOptionSelection = (questionId: string, selectedOptionIndex: number) => {
     const question = questionsForCurrentPage.find(q => q.id === questionId);
-    // Do not allow re-answering if already revealed
-    if (!question || (pageAnswers[questionId] && pageAnswers[questionId].revealed)) return;
+    // Do not allow re-answering if already revealed or if question is invalid
+    if (!question || !question.a4 || !question.an || (pageAnswers[questionId] && pageAnswers[questionId].revealed)) return;
 
     const isCorrect = question.a4[selectedOptionIndex] === question.an;
 
@@ -93,76 +95,6 @@ export function PracticeTestClient({
     }));
   };
   
-  const handlePatternAnswer = (questionId: string, answer: any) => {
-    const question = questionsForCurrentPage.find(q => q.id === questionId);
-    if (!question || (pageAnswers[questionId] && pageAnswers[questionId].revealed)) return;
-    
-    setPageAnswers(prevAnswers => ({
-      ...prevAnswers,
-      [questionId]: {
-        selectedOption: answer,
-        revealed: false,
-        correct: null,
-      }
-    }));
-  };
-  
-  const handleRevealAnswer = (questionId: string) => {
-    const question = questionsForCurrentPage.find(q => q.id === questionId);
-    if (!question) return;
-    
-    const answerState = pageAnswers[questionId];
-    if (!answerState || answerState.revealed) return;
-    
-    let isCorrect = false;
-    
-    switch(question.pattern) {
-      case 'multiple-choice':
-        if (Array.isArray(answerState.selectedOption) && Array.isArray(question.multipleCorrectAnswers)) {
-          // Check if selected options match the correct answers
-          const selectedOptions = answerState.selectedOption.map(i => question.a4[i]);
-          isCorrect = 
-            selectedOptions.length === question.multipleCorrectAnswers.length && 
-            selectedOptions.every(opt => question.multipleCorrectAnswers?.includes(opt));
-        }
-        break;
-      case 'true-false':
-        isCorrect = question.a4[answerState.selectedOption as number] === question.an;
-        break;
-      case 'matching':
-        if (typeof answerState.selectedOption === 'object' && answerState.selectedOption !== null && question.matchItems) {
-          const matching = answerState.selectedOption as Record<string, string>;
-          isCorrect = question.matchItems.every(item => matching[item.left] === item.right);
-        }
-        break;
-      case 'sequence':
-        if (Array.isArray(answerState.selectedOption) && Array.isArray(question.correctSequence)) {
-          isCorrect = 
-            answerState.selectedOption.length === question.correctSequence.length &&
-            answerState.selectedOption.every((item, i) => item === question.correctSequence?.[i]);
-        }
-        break;
-      case 'fill-blank':
-        if (typeof answerState.selectedOption === 'number') {
-          isCorrect = question.a4[answerState.selectedOption] === question.an;
-        }
-        break;
-      case 'single-choice':
-      default:
-        isCorrect = question.a4[answerState.selectedOption as number] === question.an;
-        break;
-    }
-    
-    setPageAnswers(prevAnswers => ({
-      ...prevAnswers,
-      [questionId]: {
-        ...prevAnswers[questionId],
-        revealed: true,
-        correct: isCorrect,
-      }
-    }));
-  };
-
   const attemptedQuestionsCount = useMemo(() => {
     return Object.values(pageAnswers).filter(answer => answer.revealed).length;
   }, [pageAnswers]);
@@ -196,32 +128,10 @@ export function PracticeTestClient({
               
             </CardHeader>
             <CardContent className="space-y-10">
-              {questionsForCurrentPage.map((question, index) => {
+              {questionsForCurrentPage.filter(question => question && question.id && question.a4).map((question, index) => {
                 const answerState = pageAnswers[question.id];
                 
-                // Use PatternQuestion component for questions with pattern specified
-                if (question.pattern) {
-                  return (
-                    <PatternQuestion 
-                      key={question.id}
-                      question={question}
-                      questionNumber={index + 1}
-                      selectedOption={answerState?.selectedOption}
-                      selectedMatching={typeof answerState?.selectedOption === 'object' && answerState?.selectedOption !== null 
-                        ? answerState?.selectedOption as Record<string, string> 
-                        : {}}
-                      selectedSequence={Array.isArray(answerState?.selectedOption) ? answerState?.selectedOption : []}
-                      revealed={answerState?.revealed || false}
-                      isCorrect={answerState?.correct}
-                      onAnswer={(answer) => handlePatternAnswer(question.id, answer)}
-                      onReveal={() => handleRevealAnswer(question.id)}
-                      showRevealButton={true}
-                      disabled={false}
-                    />
-                  );
-                }
-                
-                // Default question rendering for backward compatibility
+                // All questions are standard format questions
                 return (
                   <div key={question.id} className="p-4 border rounded-lg shadow-sm bg-background hover:shadow-md transition-shadow">
                     <p className="text-base sm:text-lg font-semibold mb-3">
@@ -310,15 +220,18 @@ export function PracticeTestClient({
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <div className="space-y-4 my-4">
-                        {incorrectAnswersOnPage.map((q, idx) => (
-                          <Card key={`${q.id}-incorrect-${idx}`} className="p-4 rounded-md border-destructive bg-destructive/5">
-                            <p className="font-semibold">{q.qn || `Question (Image ID: ${q.n})`}</p>
-                            {q.imageUrl && (
-                               <Image src={q.imageUrl} alt={`Image for question ${q.n}`} width={150} height={75} className="my-1 rounded-sm border" data-ai-hint="question illustration" />
-                            )}
-                            <p className="text-sm text-muted-foreground mt-1">Correct Answer: {q.an}</p>
-                          </Card>
-                        ))}
+                        {incorrectAnswersOnPage && incorrectAnswersOnPage.length > 0 ? 
+                          incorrectAnswersOnPage.filter(q => q && q.id && q.a4 && q.an).map((q, idx) => (
+                            <Card key={`${q.id}-incorrect-${idx}`} className="p-4 rounded-md border-destructive bg-destructive/5">
+                              <p className="font-semibold">{q.qn || `Question (Image ID: ${q.n})`}</p>
+                              {q.imageUrl && (
+                                <Image src={q.imageUrl} alt={`Image for question ${q.n}`} width={150} height={75} className="my-1 rounded-sm border" data-ai-hint="question illustration" />
+                              )}
+                              <p className="text-sm text-muted-foreground mt-1">Correct Answer: {q.an}</p>
+                            </Card>
+                          ))
+                        : <p>No incorrect answers to display</p>
+                        }
                       </div>
                       <AlertDialogFooter>
                         <AlertDialogCancel className="rounded-md">Close</AlertDialogCancel>

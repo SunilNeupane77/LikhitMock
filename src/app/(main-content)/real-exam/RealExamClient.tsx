@@ -1,4 +1,3 @@
-
 'use client';
 
 import { QuestionStatusIndicator } from '@/components/shared/QuestionStatusIndicator';
@@ -132,14 +131,7 @@ export function RealExamClient({ allQuestions, initialCategory, isCategoryBComin
 
 
   const startExam = useCallback(() => {
-    if (isCategoryBComingSoon && examCategory === 'B') {
-         toast({
-            title: "Coming Soon",
-            description: `Category B exams are not yet available. Please check back later.`,
-            variant: "default",
-        });
-        return;
-    }
+    // Removed isCategoryBComingSoon check since Category B is now available
 
     let finalExamQuestions: Question[] = [];
 
@@ -172,13 +164,11 @@ export function RealExamClient({ allQuestions, initialCategory, isCategoryBComin
     }
 
     if (finalExamQuestions.length === 0) {
-      if (examCategory !== 'B' || (examCategory === 'B' && !isCategoryBComingSoon)) { 
-           toast({
-             title: "Error",
-             description: `No questions available to start the exam for category ${examCategory}.`,
-             variant: "destructive",
-           });
-        }
+      toast({
+        title: "Error",
+        description: `No questions available to start the exam for category ${examCategory}.`,
+        variant: "destructive",
+      });
       return; 
     }
     
@@ -199,7 +189,7 @@ export function RealExamClient({ allQuestions, initialCategory, isCategoryBComin
     setExamFinished(false);
     setExamResult(null);
     setShowResultsDialog(false);
-  }, [allQuestions, examCategory, toast, isCategoryBComingSoon]); 
+  }, [allQuestions, examCategory, toast]); 
 
   const handleAnswerSelect = (optionIndex: number) => {
     const newAnswers = [...userAnswers];
@@ -257,7 +247,7 @@ export function RealExamClient({ allQuestions, initialCategory, isCategoryBComin
           pastResults={pastResults}
           showPastResultsDialog={showPastResultsDialog}
           setShowPastResultsDialog={setShowPastResultsDialog}
-          isCategoryBComingSoon={isCategoryBComingSoon && examCategory === 'B'} 
+          isCategoryBComingSoon={false} 
         />
         
         <div className="hidden lg:block w-48 shrink-0"></div>

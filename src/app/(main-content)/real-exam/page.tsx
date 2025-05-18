@@ -1,11 +1,11 @@
 
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { SITE_NAME, SITE_URL } from '@/lib/constants';
+import type { ExamCategoryType } from '@/lib/types';
+import { ArrowRight, Car, ClipboardCheck, Layers, Bike as MotorcycleIcon, TrafficCone } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { SITE_NAME, SITE_URL } from '@/lib/constants';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ArrowRight, ClipboardCheck, Car, Layers, Bike as MotorcycleIcon, TrafficCone } from 'lucide-react'; 
-import type { ExamCategoryType } from '@/lib/types';
 
 const pageUrl = `${SITE_URL}/real-exam`;
 
@@ -50,10 +50,9 @@ const ALL_EXAM_CATEGORIES_CONFIG: ExamCategoryDetail[] = [
   {
     type: 'B',
     name: 'Category B (Car/Jeep/Van)',
-    description: 'Prepare for car, jeep, or van license exam.', // Removed (Coming Soon) from description as button will handle it
+    description: 'Prepare for car, jeep, or van license exam.',
     icon: Car,
     href: '/real-exam/B',
-    comingSoon: true, // Mark B as coming soon
   },
   {
     type: 'Traffic',

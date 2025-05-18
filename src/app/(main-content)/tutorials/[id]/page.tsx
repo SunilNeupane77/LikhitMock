@@ -1,13 +1,12 @@
 
-import { Metadata } from 'next';
-import Link from 'next/link';
-import { SITE_NAME } from '@/lib/constants';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, ThumbsUp, MessageSquare, Clock, ArrowRight } from 'lucide-react'; // Added ArrowRight
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Separator } from '@/components/ui/separator';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { SITE_NAME } from '@/lib/constants';
+import { ArrowLeft, ArrowRight, Clock, MessageSquare, ThumbsUp } from 'lucide-react'; // Added ArrowRight
+import { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 
 
 // Placeholder video tutorials data - in a real app, this would come from a CMS or database
@@ -69,7 +68,10 @@ const tutorialsData = [
 ];
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const tutorial = tutorialsData.find(t => t.id === params.id);
+  // Extract id early to avoid using params.id directly
+  const id = params.id;
+  const tutorial = tutorialsData.find(t => t.id === id);
+  
   if (!tutorial) {
     return {
       title: `Tutorial Not Found | ${SITE_NAME}`,

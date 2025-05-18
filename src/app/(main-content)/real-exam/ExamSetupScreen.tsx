@@ -1,13 +1,11 @@
 
 'use client';
 
-import type React from 'react';
-import type { MockExamResult, ExamCategoryType } from '@/lib/types';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { History, ClipboardCheckIcon, Tag, AlertTriangle } from 'lucide-react'; // Added AlertTriangle
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'; 
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import type { ExamCategoryType, MockExamResult } from '@/lib/types';
+import { ClipboardCheckIcon, History, Tag } from 'lucide-react'; // Added AlertTriangle
 
 const REAL_EXAM_QUESTIONS_COUNT = 25;
 const REAL_EXAM_TIME_LIMIT_SECONDS = 25 * 60;
@@ -18,7 +16,7 @@ interface ExamSetupScreenProps {
   pastResults: MockExamResult[];
   showPastResultsDialog: boolean;
   setShowPastResultsDialog: (show: boolean) => void;
-  isCategoryBComingSoon: boolean; 
+  isCategoryBComingSoon: boolean; // Keeping for backward compatibility
 }
 
 function getCategoryDisplayName(category: ExamCategoryType): string {
@@ -58,15 +56,7 @@ export function ExamSetupScreen({
             )}
           </div>
 
-          {isCategoryBComingSoon && fixedCategory === 'B' && (
-             <Alert variant="default">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Coming Soon!</AlertTitle>
-                <AlertDescription>
-                    Questions for Category B (Car/Jeep/Van) are currently unavailable. Please check back later.
-                </AlertDescription>
-            </Alert>
-          )}
+          {/* Removed Coming Soon alert for Category B */}
 
           <div className="p-4 border rounded-md bg-muted/50">
             <p className="font-semibold">Exam Details:</p>
@@ -80,19 +70,17 @@ export function ExamSetupScreen({
         <CardFooter className="flex-col gap-4 pt-6">
           <Button 
             onClick={onStartExam} 
-            className="w-full text-lg py-6 rounded-lg" 
-            disabled={isCategoryBComingSoon && fixedCategory === 'B'}
+            className="w-full text-lg py-6 rounded-lg"
           >
             <ClipboardCheckIcon className="mr-2 h-5 w-5" />
-            {isCategoryBComingSoon && fixedCategory === 'B' ? 'Coming Soon' : 'Start Real Exam'}
+            Start Real Exam
           </Button>
           {pastResults.length > 0 && (
             <AlertDialog open={showPastResultsDialog} onOpenChange={setShowPastResultsDialog}>
               <AlertDialogTrigger asChild>
                 <Button 
                   variant="outline" 
-                  className="w-full rounded-lg" 
-                  disabled={isCategoryBComingSoon && fixedCategory === 'B'}
+                  className="w-full rounded-lg"
                 >
                     <History className="mr-2 h-4 w-4" />View Past Results for this Category
                 </Button>

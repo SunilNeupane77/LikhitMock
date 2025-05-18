@@ -1,7 +1,6 @@
 
 'use client';
 
-import { PatternQuestion } from '@/components/shared/PatternQuestion';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,7 +11,6 @@ import type { Question } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight, Timer } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
 
 interface ExamInProgressScreenProps {
   currentQuestion: Question;
@@ -35,23 +33,6 @@ export function ExamInProgressScreen({
   onNavigateQuestion,
   onConfirmFinishExam,
 }: ExamInProgressScreenProps) {
-
-  // Handle different question pattern answers
-  const [patternAnswer, setPatternAnswer] = useState<any>(null);
-  
-  // Handle pattern question answers
-  const handlePatternAnswer = (answer: any) => {
-    setPatternAnswer(answer);
-    // For now, we won't set the answer in userAnswers directly, as we want to support finishing the exam properly
-  }
-  
-  const handlePatternReveal = () => {
-    // This is just a placeholder in the exam - we don't actually reveal answers during the exam
-    // but we record that the user has made a selection
-    if (patternAnswer !== null) {
-      onAnswerSelect(0); // Just mark it as answered for now
-    }
-  }
   
   const renderOption = (optionText: string, index: number) => {
     const optionId = `option-real-exam-${currentQuestion.id}-${index}`;
@@ -101,31 +82,14 @@ export function ExamInProgressScreen({
           )}
         </CardHeader>
         <CardContent>
-          {currentQuestion.pattern ? (
-            // Render pattern questions using PatternQuestion component
-            <PatternQuestion
-              question={currentQuestion}
-              questionNumber={currentQuestionIndex + 1}
-              selectedOption={patternAnswer}
-              selectedMatching={typeof patternAnswer === 'object' && patternAnswer !== null ? patternAnswer : {}}
-              selectedSequence={Array.isArray(patternAnswer) ? patternAnswer : []}
-              revealed={false} // Never reveal in exam mode
-              onAnswer={handlePatternAnswer}
-              onReveal={handlePatternReveal}
-              showRevealButton={true}
-              disabled={false}
-            />
-          ) : (
-            // Render traditional questions
-            <RadioGroup
-              key={`${currentQuestion.id}-${currentQuestionIndex}`}
-              value={userAnswers[currentQuestionIndex] !== null ? userAnswers[currentQuestionIndex]!.toString() : undefined}
-              onValueChange={(value) => onAnswerSelect(parseInt(value))}
-              className="space-y-3"
-            >
-              {currentQuestion.a4.map(renderOption)}
-            </RadioGroup>
-          )}
+          <RadioGroup
+            key={`${currentQuestion.id}-${currentQuestionIndex}`}
+            value={userAnswers[currentQuestionIndex] !== null ? userAnswers[currentQuestionIndex]!.toString() : undefined}
+            onValueChange={(value) => onAnswerSelect(parseInt(value))}
+            className="space-y-3"
+          >
+            {currentQuestion.a4.map(renderOption)}
+          </RadioGroup>
         </CardContent>
         <CardFooter className="flex justify-between pt-6">
           <Button

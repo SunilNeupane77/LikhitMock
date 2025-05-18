@@ -1,7 +1,8 @@
-import type {NextConfig} from 'next';
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  output: 'export', // Added for static site generation
+  // Re-enabling static export with configuration to fix module loading issues
+  output: 'export', 
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -17,8 +18,10 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
-    unoptimized: true, // Added for static export, as next/image optimization needs a server
+    unoptimized: true, // Required for static export
   },
+  // Add trailing slash to help with route handling in static export
+  trailingSlash: true,
 };
 
 export default nextConfig;

@@ -1,7 +1,7 @@
 
-import { redirect } from 'next/navigation';
-import type { Metadata } from 'next';
 import { SITE_NAME } from '@/lib/constants';
+import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 
 interface PracticeCategoryRedirectPageProps {
   params: { category: string };
@@ -15,7 +15,10 @@ function getCategoryDisplayName(categoryCode: string): string {
 }
 
 export async function generateMetadata({ params }: PracticeCategoryRedirectPageProps): Promise<Metadata> {
-  const categoryDisplayName = getCategoryDisplayName(params.category);
+  // Extract category early to avoid using params.category directly
+  const category = params.category;
+  const categoryDisplayName = getCategoryDisplayName(category);
+  
   return {
     title: `Loading Practice Test - ${categoryDisplayName} | ${SITE_NAME}`,
     robots: {

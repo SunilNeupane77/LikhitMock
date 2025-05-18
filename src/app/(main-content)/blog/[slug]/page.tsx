@@ -21,7 +21,10 @@ interface BlogPostPageProps {
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-  const post = await getPostData(params.slug);
+  // Extract slug early to avoid params.slug access
+  const slug = params.slug;
+  const post = await getPostData(slug);
+  
   if (!post) {
     return {
       title: `Post Not Found | ${SITE_NAME}`,
@@ -114,7 +117,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   </div>
                   <div className="flex items-center">
                     <Tag className="mr-1.5 h-4 w-4" />
-                    <span>By {post.authors?.map(author => author.name).join(', ')}</span>
+                    <span>
+                      By {Array.isArray(post.authors)
+                        ? post.authors.map((author: any) => author.name).join(', ')
+                        : post.authors}
+                    </span>
                   </div>
                 </div>
                 {(post.image || post.coverImage) && (

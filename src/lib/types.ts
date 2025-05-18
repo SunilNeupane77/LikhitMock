@@ -27,15 +27,6 @@ export type ResourceLink = {
   href: string;
 };
 
-// Question pattern types for different formats
-export type QuestionPatternType = 
-  | 'single-choice' // Traditional single-correct-answer
-  | 'multiple-choice' // Multiple correct answers
-  | 'true-false' // True/False questions
-  | 'matching' // Match items from columns
-  | 'sequence' // Arrange in correct sequence
-  | 'fill-blank'; // Fill in the blank
-
 // New Question type based on ak.json format and trafficqn.json requirements
 export type Question = {
   id: string; // Unique identifier, can be same as 'n' or generated
@@ -45,11 +36,6 @@ export type Question = {
   imageUrl?: string; // Image URL (for image-based questions like Traffic)
   a4: string[]; // Array of 4 option strings
   an: string; // The correct answer string (must be one of the strings in a4)
-  pattern?: QuestionPatternType; // The question pattern type (defaults to single-choice if not specified)
-  matchItems?: { left: string; right: string }[]; // For matching questions
-  multipleCorrectAnswers?: string[]; // For multiple-choice questions (multiple correct)
-  correctSequence?: string[]; // For sequence questions
-  blankAnswers?: string[]; // For fill-in-the-blank questions
 };
 
 // Traffic Sign type for the /traffic-signs learning page

@@ -13,7 +13,6 @@ export const NAV_LINKS: NavItem[] = [
   { href: "/", label: "Home", icon: Home },
   { href: "/real-exam", label: "Real Exam", icon: ClipboardCheck },
   { href: "/practice", label: "Practice Test", icon: FileText }, 
-  { href: "/pattern-examples", label: "Question Patterns", icon: ListChecks },
   { href: "/traffic-signs", label: "Traffic Signs", icon: TrafficCone },
   { href: "/blog", label: "Blog", icon: Rss },
   { href: "/tutorials", label: "Tutorials", icon: Film },
@@ -26,7 +25,7 @@ export const KEY_FEATURES: FeatureItem[] = [
   {
     icon: ListChecks,
     title: "Comprehensive Question Bank",
-    description: "Practice questions for vehicle category A (Motorcycle/Scooter) and B (Car/Jeep/Van - coming soon).",
+    description: "Practice questions for vehicle category A (Motorcycle/Scooter) and B (Car/Jeep/Van).",
   },
   {
     icon: TrafficCone,
@@ -123,9 +122,8 @@ export const REAL_EXAM_CATEGORIES_CONFIG: ExtendedExamCategoryDetail[] = [
     type: 'B' as const, 
     name: 'Category B (Car/Jeep/Van)', 
     icon: Car, 
-    description: 'Prepare for car, jeep, or van license exam.', // Description updated
-    href: '/real-exam/B',
-    comingSoon: true, // Marked as coming soon
+    description: 'Prepare for car, jeep, or van license exam.',
+    href: '/real-exam/B'
   },
 ];
 
@@ -148,9 +146,8 @@ export const PRACTICE_CATEGORIES_CONFIG: {
   {
     type: 'B',
     name: 'Category B (Car/Jeep/Van)',
-    description: 'Comprehensive practice for all Category B (car, jeep, van) textual questions and all traffic sign questions.', // Description updated
+    description: 'Comprehensive practice for all Category B (car, jeep, van) textual questions and all traffic sign questions.',
     icon: Car,
     href: '/practice/B/1',
-    comingSoon: true, 
   },
 ];

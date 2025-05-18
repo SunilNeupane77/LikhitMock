@@ -21,7 +21,7 @@ const faqData = [
   {
     "id": "q2",
     "question": "Which vehicle categories are covered on this platform?",
-    "answer": "We provide practice questions and materials for Category A (Motorcycle), Category B (Car, Jeep, Van - coming soon), and Category K (Scooter).",
+    "answer": "We provide practice questions and materials for Category A (Motorcycle), Category B (Car, Jeep, Van), and Category K (Scooter).",
   },
   {
     "id": "q3",

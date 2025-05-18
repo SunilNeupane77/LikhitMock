@@ -42,19 +42,7 @@ export default function HomePage() {
   
 
   return (
-    <>
-      {/* New Feature Announcement Banner */}
-      <div className="bg-primary text-primary-foreground py-3">
-        <div className="container text-center">
-          <p className="text-sm md:text-base font-medium">
-            🎉 New! We've added different question patterns to better prepare you for the exam. 
-            <Link href="/pattern-examples" className="underline ml-1.5 hover:opacity-90">
-              Check them out
-            </Link>
-          </p>
-        </div>
-      </div>
-      
+    <>      
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 bg-gradient-to-br from-primary/10 via-background to-background">
         <div className="absolute inset-0 bg-[url('/images/traffic-pattern.png')] opacity-5 overflow-hidden">
